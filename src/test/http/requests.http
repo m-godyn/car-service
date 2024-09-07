@@ -1,0 +1,163 @@
+POST {{url}}/car
+Accept: application/json
+Content-Type: application/json
+
+{
+  "vin": "1HGCM82633A004252",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "production_year": 2020,
+  "mileage": 50000,
+  "fuel_type": "GASOLINE",
+  "engine_capacity": 1.8,
+  "color": "Black",
+  "transmission": "MANUAL",
+  "owner": "John Doe",
+  "price": 25000.00,
+  "registration_number": "XYZ123456",
+  "registration_date": "2020-05-15",
+  "insurance_expiration_date": "2023-05-15",
+  "technical_inspection_expiration_date": "2024-05-15"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 201, "Response status is not 201")
+        client.assert(response.headers.valueOf("Location") === "http://localhost:8080/v1/car/1HGCM82633A004252")
+    })
+%}
+
+###
+
+POST {{url}}/car
+Accept: application/json
+Content-Type: application/json
+
+{
+  "vin": "1HGCM82633A004252",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "production_year": 2020,
+  "mileage": 50000,
+  "fuel_type": "GASOLINE",
+  "engine_capacity": 1.8,
+  "color": "Black",
+  "transmission": "MANUAL",
+  "owner": "John Doe",
+  "price": 25000.00,
+  "registration_number": "XYZ123456",
+  "registration_date": "2020-05-15",
+  "insurance_expiration_date": "2023-05-15",
+  "technical_inspection_expiration_date": "2024-05-15"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 409, "Response status is not 409")
+    })
+%}
+
+###
+
+GET {{url}}/cars
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200")
+    })
+%}
+
+###
+
+PUT {{url}}/car/1HGCM82633A004252
+Accept: application/json
+Content-Type: application/json
+
+{
+  "owner": "Jane Smith",
+  "mileage": 60000,
+  "price": 20000.0
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200")
+        client.assert(response.body.vin === "1HGCM82633A004252")
+        client.assert(response.body.owner === "Jane Smith")
+        client.assert(response.body.mileage === 60000)
+        client.assert(response.body.price === 20000.0)
+    })
+%}
+
+###
+
+PUT {{url}}/car/NON_EXISTENT_VIN
+Accept: application/json
+Content-Type: application/json
+
+{
+  "owner": "Jane Smith",
+  "mileage": 60000,
+  "price": 20000.0
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 404, "Response status is not 404")
+    })
+%}
+
+###
+
+GET {{url}}/car/1HGCM82633A004252
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200")
+        client.assert(response.body.vin === "1HGCM82633A004252")
+        client.assert(response.body.brand === "Toyota")
+        client.assert(response.body.owner === "Jane Smith")
+        client.assert(response.body.mileage === 60000)
+        client.assert(response.body.price === 20000.0)
+    })
+%}
+
+###
+
+GET {{url}}/car/NON_EXISTENT_VIN
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 404, "Response status is not 404")
+    })
+%}
+
+###
+
+DELETE {{url}}/car/1HGCM82633A004252
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 204, "Response status is not 204")
+    })
+%}
+
+###
+
+DELETE {{url}}/car/NON_EXISTENT_VIN
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 404, "Response status is not 404")
+    })
+%}
